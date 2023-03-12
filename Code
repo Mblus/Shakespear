@@ -1,0 +1,73 @@
+#_______________________________________________________________________________________________________________________
+#__________________________________________________Documentation________________________________________________________
+#_______________________________________________________________________________________________________________________
+#Gavin Haroche, date:               3/9/2023
+#Assignment:                        Dictionary and graphing
+#Versions:                          0.1 built dictionary structure
+#Versions:                          0.5 writing to a file (csv.csv)
+#Versions:                          1.0 Now creates a pie chart. (not cleaned up) (csv.csv)
+#versions:                          1.3 takes a range, and only 35 results based on that range.
+
+
+#https://www.textcleanr.com/                  site that I used to clean the file at one point.
+
+
+
+dictionary1 = {}                                                                                                        #the main dictionary
+labels = []                                                                                                             #labels for the pie chart
+sizes = []                                                                                                              #the sizes for the labels
+counter1 = 0                                                                                                            #counter for taking the 35 pieces of data
+import matplotlib.pyplot as plt
+import csv
+
+
+
+
+print("Important:      Because I want to leave the origional file in tact, to find text that could be relevant to shakespear, select the propper range, 35 results max per graph.")
+input1 = int(input("min value?"))                                                                                       #info along with the input statements for the range
+input2 = int(input("max value?"))
+
+
+
+f = open("shakespear.txt", "r")                                                                                         #open the file as read
+
+
+
+for line in f:                                                                                                          #for loop that creates the dictionary based off of the file readings
+    for word in line.split():
+        if word not in dictionary1:
+            dictionary1[word] = 1
+        else:
+            dictionary1[word] += 1
+
+
+
+with open('csv.csv', 'w') as csv_file:                                                                                  #create a new file
+    writer = csv.writer(csv_file)                                                                                       #write the dictionary to the csv
+
+    for key, value in dictionary1.items():
+       writer.writerow([key, value])                                                                                    #write the dictionary to the csv
+
+
+
+for key, value in dictionary1.copy().items():                                                                           #data selection
+    if value <= input1 or value >= input2:                                                                              #deleting those that dont follow the range
+        del dictionary1[key]
+    else:
+        if counter1 <= 34:                                                                                              #taking the biggest 35 options
+            pass
+        else:
+            del dictionary1[key]
+        counter1+=1
+
+
+
+for x, y in dictionary1.items():
+    labels.append(x)                                                                                                    #building the pie chart structure by setting labels and sizes to x and y
+    sizes.append(y)
+
+
+plt.pie(sizes, labels=labels)                                                                                           #finalizing the pie chart
+
+plt.axis('equal')
+plt.show()                                                                                                              #showing pie chart
